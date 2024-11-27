@@ -4,12 +4,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import User
+from users.permissions import IsActiveUserPermission
 from users.serializer import UserSerializer
 
 
 class UsersList(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsActiveUserPermission]
 
     def get(self):
         users = self.queryset
@@ -25,6 +27,8 @@ class UsersList(APIView):
 
 
 class UsersDetail(APIView):
+    permission_classes = [IsActiveUserPermission]
+
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
